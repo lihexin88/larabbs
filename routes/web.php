@@ -26,8 +26,11 @@ Route::get('email/resend', 'Auth\VerificationController@resend')->name('verifica
 //资源控制器
 Route::resource('users', 'UsersController', ['only' => ['show', 'update', 'edit']]);
 //相当于：
-    //Route::get('/users/{user}', 'UsersController@show')->name('users.show');
-    //Route::get('/users/{user}/edit', 'UsersController@edit')->name('users.edit');
-    //Route::patch('/users/{user}', 'UsersController@update')->name('users.update');
+//Route::get('/users/{user}', 'UsersController@show')->name('users.show');
+//Route::get('/users/{user}/edit', 'UsersController@edit')->name('users.edit');
+//Route::patch('/users/{user}', 'UsersController@update')->name('users.update');
 
 Route::resource('topics', 'TopicsController', ['only' => ['index', 'show', 'create', 'store', 'update', 'edit', 'destroy']]);
+
+//根据分类列表话题
+Route::resource('categories', 'CategoriesController', ['only' => ['show']]);
