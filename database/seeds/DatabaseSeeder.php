@@ -2,16 +2,12 @@
 
 use Illuminate\Database\Seeder;
 
-class DatabaseSeeder extends Seeder
-{
+class DatabaseSeeder extends Seeder {
     /**
-     * Seed the application's database.
-     *
-     * @return void
+     *按照顺序进行批量数据填充
      */
-    public function run()
-    {
-        // $this->call(UsersTableSeeder::class);
-		$this->call(TopicsTableSeeder::class);
+    public function run() {
+        $this->call(UsersTableSeeder::class);
+        $this->call(TopicsTableSeeder::class);
     }
 }
