@@ -10,8 +10,9 @@ use Illuminate\Contracts\Auth\MustVerifyEmail as MustVerifyEmailContract;
 class User extends Authenticatable implements MustVerifyEmailContract {
     use Notifiable, MustVerifyEmailTrait;
 
+//    允许用户进行修改的字段
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password', 'introduction',
     ];
 
     protected $hidden = [
