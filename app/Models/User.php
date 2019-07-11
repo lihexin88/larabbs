@@ -12,19 +12,23 @@ class User extends Authenticatable implements MustVerifyEmailContract {
 
 //    允许用户进行修改的字段
     protected $fillable = [
-        'name', 'email', 'password', 'introduction','avatar',
+        'name', 'email', 'password', 'introduction', 'avatar',
     ];
 
     protected $hidden = [
         'password', 'remember_token',
     ];
 
+    public function isAuthorOf($model) {
+        return $this->id == $model->user_id;
+    }
+
 
     /**
      * 用户-话题一对多关系
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function topics(){
+    public function topics() {
         return $this->hasMany(Topic::class);
     }
 }
