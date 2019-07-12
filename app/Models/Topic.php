@@ -63,7 +63,15 @@ class Topic extends Model {
      * 一个话题可以拥有多个回复
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function replies(){
+    public function replies() {
         return $this->hasMany(Reply::class);
+    }
+
+    /**
+     *  回复数统计，在创建之后和删除之后进行统计
+     */
+    public function updateReplyCount() {
+        $this->reply_count = $this->replies->count();
+        $this->save();
     }
 }

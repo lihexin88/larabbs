@@ -14,8 +14,7 @@ class ReplyObserver {
      * @param Reply $reply
      */
     public function created(Reply $reply) {
-        $reply->topic->reply_count = $reply->topic->replies->count();
-        $reply->topic->save();
+        $reply->topic->updateReplyCount();
 
         // 通知话题作者有新的评论
         $reply->topic->user->notify(new TopicReplied($reply));
@@ -28,5 +27,13 @@ class ReplyObserver {
      */
     public function creating(Reply $reply) {
         $reply->content = clean($reply->content, 'user_topic_body');
+    }
+
+    /**
+     * 监听删除帖子的事件，删除后，回复数减少
+     * @param Reply $reply
+     */
+    public function deleted(Reply $reply) {
+        $reply->topic->updateReplyCount();
     }
 }
