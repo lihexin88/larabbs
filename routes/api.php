@@ -15,7 +15,8 @@ $api->version('v1', [
 
 //用户登录
 $api->version('v1', [
-    'namespace' => 'App\Http\Controllers\Api'
+    'namespace' => 'App\Http\Controllers\Api',
+    'middleware' => 'serializer:array'
 ], function ($api) {
     // 短信验证码
     $api->post('verificationCodes', 'VerificationCodesController@store')
@@ -47,15 +48,17 @@ $api->version('v1', [
 
     $api->group([
         'middleware' => 'api.throttle',
-        'limit' => config('api.rate_limits.sign.limit'),
-        'expires' => config('api.rate_limits.sign.expires'),
+        'limit' => config('api.rate_limits.access.limit'),
+        'expires' => config('api.rate_limits.access.expires'),
     ], function ($api) {
-        // 短信验证码
-        $api->post('verificationCodes', 'VerificationCodesController@store')
-            ->name('api.verificationCodes.store');
-        // 用户注册
-        $api->post('users', 'UsersController@store')
-            ->name('api.users.store');
+        // 游客可以访问的接口
+
+        // 需要 token 验证的接口
+        $api->group(['middleware' => 'api.auth'], function ($api) {
+            // 当前登录用户信息
+            $api->get('user', 'UsersController@me')
+                ->name('api.user.show');
+        });
     });
 });
 
