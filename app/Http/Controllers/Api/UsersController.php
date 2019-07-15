@@ -54,8 +54,7 @@ class UsersController extends Controller {
      * @param UserRequest $request
      * @return \Dingo\Api\Http\Response
      */
-    public function update(UserRequest $request)
-    {
+    public function update(UserRequest $request) {
         $user = $this->user();
 
         $attributes = $request->only(['name', 'email', 'introduction']);
