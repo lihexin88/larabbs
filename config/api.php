@@ -170,9 +170,8 @@ return [
 
 
     'auth' => [
-
+        'jwt' => 'Dingo\Api\Auth\Provider\JWT',
     ],
-
     /*
     |--------------------------------------------------------------------------
     | Throttling / Rate Limiting
