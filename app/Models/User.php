@@ -36,9 +36,9 @@ class User extends Authenticatable implements MustVerifyEmailContract {
         $this->laravelNotify($instance);
     }
 
-//    允许用户进行修改的字段
+//    允许用户进行修改的字段,需按照用户表中的顺序
     protected $fillable = [
-        'name', 'email', 'password', 'introduction', 'avatar',
+        'name', 'phone', 'email', 'password', 'introduction', 'avatar',
     ];
 
     protected $hidden = [
