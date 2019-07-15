@@ -39,8 +39,8 @@ class User extends Authenticatable implements MustVerifyEmailContract {
 //    允许用户进行修改的字段,需按照用户表中的顺序
     protected $fillable = [
         'name', 'phone', 'email', 'password', 'introduction', 'avatar',
+        'weixin_openid', 'weixin_unionid'
     ];
-
     protected $hidden = [
         'password', 'remember_token',
     ];
