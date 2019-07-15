@@ -10,8 +10,6 @@ use App\Handlers\ImageUploadHandler;
 use App\Http\Requests\UserRequest;
 
 class UsersController extends Controller {
-    //
-
     /**
      * 1、添加中间件，验证用户登录操作，except之外的动作均需要验证，only为当前允许未验证用户进行的访问，首选except
      * UsersController constructor.
