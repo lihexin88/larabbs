@@ -34,7 +34,7 @@ class Kernel extends HttpKernel
 
         // Web 中间件组，应用于 routes/web.php 路由文件，
         // 在 RouteServiceProvider 中设定
-        'web' => [
+        'web'           => [
             // Cookie 加密解密
             \App\Http\Middleware\EncryptCookies::class,
 
@@ -66,11 +66,14 @@ class Kernel extends HttpKernel
 
         // API 中间件组，应用于 routes/api.php 路由文件，
         // 在 RouteServiceProvider 中设定
-        'api' => [
+        'api'           => [
             // 使用别名来调用中间件
             // 请见：https://learnku.com/docs/laravel/5.7/middleware#为路由分配中间件
             'throttle:60,1',
             'bindings',
+        ],
+        'change-locale' => [
+            \App\Http\Middleware\ChangeLocale::class
         ],
     ];
 
@@ -78,31 +81,31 @@ class Kernel extends HttpKernel
     protected $routeMiddleware = [
 
         // 只有登录用户才能访问，我们在控制器的构造方法中大量使用
-        'auth' => \Illuminate\Auth\Middleware\Authenticate::class,
+        'auth'       => \Illuminate\Auth\Middleware\Authenticate::class,
 
         // HTTP Basic Auth 认证
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
 
         // 处理路由绑定
         // 见：https://learnku.com/docs/laravel/5.7/routing#route-model-binding
-        'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,
+        'bindings'   => \Illuminate\Routing\Middleware\SubstituteBindings::class,
 
         'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,
 
         // 用户授权功能
-        'can' => \Illuminate\Auth\Middleware\Authorize::class,
+        'can'           => \Illuminate\Auth\Middleware\Authorize::class,
 
         // 只有游客才能访问，在 register 和 login 请求中使用，只有未登录用户才能访问这些页面
-        'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
+        'guest'         => \App\Http\Middleware\RedirectIfAuthenticated::class,
 
         // 签名认证，在找回密码章节里我们讲过
-        'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
+        'signed'        => \Illuminate\Routing\Middleware\ValidateSignature::class,
 
         // 访问节流，类似于 『1 分钟只能请求 10 次』的需求，一般在 API 中使用
-        'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
+        'throttle'      => \Illuminate\Routing\Middleware\ThrottleRequests::class,
 
         // Laravel 自带的强制用户邮箱认证的中间件，为了更加贴近我们的逻辑，已被重写
-        'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+        'verified'      => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
     ];
 
     // 设定中间件优先级，此数组定义了除『全局中间件』以外的中间件执行顺序

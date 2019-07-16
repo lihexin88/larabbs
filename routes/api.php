@@ -9,7 +9,8 @@ $api->version('v1', [
     'namespace'  => 'App\Http\Controllers\Api',
     'middleware' => [
         'serializer:array',
-        'bindings'
+        'bindings',
+        'change-locale'
     ],
 ], function ($api) {
 
@@ -37,8 +38,6 @@ $api->version('v1', [
 
         // 活跃用户
         $api->get('actived/users', 'UsersController@activedIndex')->name('api.actived.users.index');
-
-
 
 
         //话题详情
@@ -70,7 +69,7 @@ $api->version('v1', [
             // 图片资源
             $api->post('images', 'ImagesController@store')->name('api.images.store');
             // 发布话题
-            $api->post('topics', 'TopicsController@store')->name('api.topics.store');
+            $api->post('topics', 'TopicsController@store')->name('api.topics.stores');
             //修改话题
             $api->patch('topics/{topic}', 'TopicsController@update')->name('api.topics.update');
             //删除话题
