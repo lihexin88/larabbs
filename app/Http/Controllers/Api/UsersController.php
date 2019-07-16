@@ -12,11 +12,6 @@ use Illuminate\Support\Facades\DB;
 class UsersController extends Controller
 {
 
-    public function index()
-    {
-        dd($_SERVER);
-    }
-
     /**
      * 用户注册 控制器
      * @param UserRequest $request
@@ -45,10 +40,10 @@ class UsersController extends Controller
         \Cache::forget($request->verification_key);
 
         return $this->response->item($user, new UserTransformer())->setMeta([
-                'access_token' => \Auth::guard('api')->fromUser($user),
-                'token_type'   => 'Bearer',
-                'expires_in'   => \Auth::guard('api')->factory()->getTTL() * 60
-            ])->setStatusCode(201);
+            'access_token' => \Auth::guard('api')->fromUser($user),
+            'token_type'   => 'Bearer',
+            'expires_in'   => \Auth::guard('api')->factory()->getTTL() * 60
+        ])->setStatusCode(201);
     }
 
     public function me()
@@ -68,7 +63,8 @@ class UsersController extends Controller
         $attributes = $request->only([
             'name',
             'email',
-            'introduction'
+            'introduction',
+            'registration_id'
         ]);
 
         if ($request->avatar_image_id) {
