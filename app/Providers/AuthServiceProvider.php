@@ -5,15 +5,21 @@ namespace App\Providers;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
-class AuthServiceProvider extends ServiceProvider {
+
+use Carbon\Carbon;
+use Laravel\Passport\Passport;
+
+
+class AuthServiceProvider extends ServiceProvider
+{
     /**
      * The policy mappings for the application.
      *
      * @var array
      */
     protected $policies = [
-		 \App\Models\Reply::class => \App\Policies\ReplyPolicy::class,
-		 \App\Models\Topic::class => \App\Policies\TopicPolicy::class,
+        \App\Models\Reply::class => \App\Policies\ReplyPolicy::class,
+        \App\Models\Topic::class => \App\Policies\TopicPolicy::class,
         // 'App\Model' => 'App\Policies\ModelPolicy',
     ];
 
@@ -22,7 +28,8 @@ class AuthServiceProvider extends ServiceProvider {
      *
      * @return void
      */
-    public function boot() {
+    public function boot()
+    {
         $this->registerPolicies();
         // 修改策略自动发现的逻辑
         Gate::guessPolicyNamesUsing(function ($modelClass) {
@@ -31,10 +38,17 @@ class AuthServiceProvider extends ServiceProvider {
         });
 
 
-
         \Horizon::auth(function ($request) {
             // 是否是站长
             return \Auth::user()->hasRole('Founder');
         });
+
+
+        // Passport 的路由
+        Passport::routes();
+        // access_token 过期时间
+        Passport::tokensExpireIn(Carbon::now()->addDays(15));
+        // refreshTokens 过期时间
+        Passport::refreshTokensExpireIn(Carbon::now()->addDays(30));
     }
 }
