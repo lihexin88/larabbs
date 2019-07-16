@@ -10,10 +10,11 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Auth\MustVerifyEmail as MustVerifyEmailTrait;
 use Illuminate\Contracts\Auth\MustVerifyEmail as MustVerifyEmailContract;
 
-class User extends Authenticatable implements MustVerifyEmailContract, JWTSubject {
+class User extends Authenticatable implements MustVerifyEmailContract, JWTSubject
+{
     use Traits\LastActivedAtHelper;
     use HasRoles;
-//    活跃度算法
+    //    活跃度算法
     use Traits\ActiveUserHelper;
 
     use MustVerifyEmailTrait;
@@ -22,7 +23,8 @@ class User extends Authenticatable implements MustVerifyEmailContract, JWTSubjec
         notify as protected laravelNotify;
     }
 
-    public function notify($instance) {
+    public function notify($instance)
+    {
         // 如果要通知的人是当前用户，就不必通知了！
         if ($this->id == Auth::id()) {
             return;
@@ -36,16 +38,24 @@ class User extends Authenticatable implements MustVerifyEmailContract, JWTSubjec
         $this->laravelNotify($instance);
     }
 
-//    允许用户进行修改的字段,需按照用户表中的顺序
+    //    允许用户进行修改的字段,需按照用户表中的顺序
     protected $fillable = [
-        'name', 'phone', 'email', 'password', 'introduction', 'avatar',
-        'weixin_openid', 'weixin_unionid'
+        'name',
+        'phone',
+        'email',
+        'password',
+        'introduction',
+        'avatar',
+        'weixin_openid',
+        'weixin_unionid'
     ];
     protected $hidden = [
-        'password', 'remember_token',
+        'password',
+        'remember_token',
     ];
 
-    public function isAuthorOf($model) {
+    public function isAuthorOf($model)
+    {
         return $this->id == $model->user_id;
     }
 
@@ -54,7 +64,8 @@ class User extends Authenticatable implements MustVerifyEmailContract, JWTSubjec
      * 用户-话题一对多关系
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function topics() {
+    public function topics()
+    {
         return $this->hasMany(Topic::class);
     }
 
@@ -63,14 +74,16 @@ class User extends Authenticatable implements MustVerifyEmailContract, JWTSubjec
      * 一个用户可以拥有多个回复
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function replies() {
+    public function replies()
+    {
         return $this->hasMany(Reply::class);
     }
 
     /**
      *标记为已读状态
      */
-    public function markAsRead() {
+    public function markAsRead()
+    {
         $this->notification_count = 0;
         $this->save();
         $this->unreadNotifications->markAsRead();
@@ -80,7 +93,8 @@ class User extends Authenticatable implements MustVerifyEmailContract, JWTSubjec
      * 设置用户密码时加密
      * @param $value
      */
-    public function setPasswordAttribute($value) {
+    public function setPasswordAttribute($value)
+    {
         // 如果值的长度等于 60，即认为是已经做过加密的情况
         if (strlen($value) != 60) {
 
@@ -95,7 +109,8 @@ class User extends Authenticatable implements MustVerifyEmailContract, JWTSubjec
      * 管理端上传用户头像，修改用户头像问题
      * @param $path
      */
-    public function setAvatarAttribute($path) {
+    public function setAvatarAttribute($path)
+    {
         // 如果不是 `http` 子串开头，那就是从后台上传的，需要补全 URL
         if (!starts_with($path, 'http')) {
 
@@ -107,11 +122,13 @@ class User extends Authenticatable implements MustVerifyEmailContract, JWTSubjec
     }
 
 
-    public function getJWTIdentifier() {
+    public function getJWTIdentifier()
+    {
         return $this->getKey();
     }
 
-    public function getJWTCustomClaims() {
+    public function getJWTCustomClaims()
+    {
         return [];
     }
 }

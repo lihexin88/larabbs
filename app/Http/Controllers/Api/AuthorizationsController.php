@@ -63,8 +63,10 @@ class AuthorizationsController extends Controller
                 // 没有用户，默认创建一个用户
                 if (!$user) {
                     $user = User::create([
-                        'name'          => $oauthUser->getNickname(), 'avatar' => $oauthUser->getAvatar(),
-                        'weixin_openid' => $oauthUser->getId(), 'weixin_unionid' => $unionid,
+                        'name'           => $oauthUser->getNickname(),
+                        'avatar'         => $oauthUser->getAvatar(),
+                        'weixin_openid'  => $oauthUser->getId(),
+                        'weixin_unionid' => $unionid,
                     ]);
                 }
 
@@ -78,7 +80,8 @@ class AuthorizationsController extends Controller
     protected function respondWithToken($token)
     {
         return $this->response->array([
-            'access_token' => $token, 'token_type' => 'Bearer',
+            'access_token' => $token,
+            'token_type'   => 'Bearer',
             'expires_in'   => \Auth::guard('api')->factory()->getTTL() * 60
         ]);
     }

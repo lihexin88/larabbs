@@ -6,15 +6,25 @@ $api = app('Dingo\Api\Routing\Router');
 
 
 $api->version('v1', [
-    'namespace' => 'App\Http\Controllers\Api', 'middleware' => ['serializer:array', 'bindings'],
+    'namespace'  => 'App\Http\Controllers\Api',
+    'middleware' => [
+        'serializer:array',
+        'bindings'
+    ],
 ], function ($api) {
 
     // 游客可以访问的接口
     $api->group([
-        'middleware' => 'api.throttle', 'limit' => config('api.rate_limits.access.limit'),
+        'middleware' => 'api.throttle',
+        'limit'      => config('api.rate_limits.access.limit'),
         'expires'    => config('api.rate_limits.access.expires'),
     ], function ($api) {
         $api->get('categories', 'CategoriesController@index')->name('api.categories.index');
+
+        $api->get('topics', 'TopicsController@index')->name('api.topics.index');
+
+        $api->get('users/{user}/topics', 'TopicsController@userIndex')->name('api.users.topics.index');
+
         // 短信验证码
         $api->post('verificationCodes', 'VerificationCodesController@store')->name('api.verificationCodes.store');
         // 用户注册
