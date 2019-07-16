@@ -5,12 +5,18 @@ use Illuminate\Http\Request;
 $api = app('Dingo\Api\Routing\Router');
 
 
-$api->version('v1', ['namespace' => 'App\Http\Controllers\Api', 'middleware' => ['serializer:array', 'bindings'],], function ($api) {
+$api->version('v1', [
+    'namespace' => 'App\Http\Controllers\Api', 'middleware' => ['serializer:array', 'bindings'],
+], function ($api) {
 
-    $api->group(['middleware' => 'api.throttle', 'limit' => config('api.rate_limits.access.limit'), 'expires' => config('api.rate_limits.access.expires'),], function ($api) {
+    // 游客可以访问的接口
+    $api->group([
+        'middleware' => 'api.throttle', 'limit' => config('api.rate_limits.access.limit'),
+        'expires'    => config('api.rate_limits.access.expires'),
+    ], function ($api) {
+        $api->get('categories', 'CategoriesController@index')->name('api.categories.index');
         // 短信验证码
         $api->post('verificationCodes', 'VerificationCodesController@store')->name('api.verificationCodes.store');
-
         // 用户注册
         $api->post('users', 'UsersController@store')->name('api.users.store');
         // 图片验证码
@@ -24,13 +30,12 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers\Api', 'middleware' => 
         // 删除token
         $api->delete('authorizations/current', 'AuthorizationsController@destroy')->name('api.authorizations.destroy');
 
-
-        // 游客可以访问的接口
-        $api->get('categories', 'CategoriesController@index')->name('api.categories.index');
-
-
         // 需要 token 验证的接口
         $api->group(['middleware' => 'api.auth'], function ($api) {
+            // 当前登录用户信息
+            $api->get('user', 'UsersController@me')->name('api.user.show');
+            // 图片资源
+            $api->post('images', 'ImagesController@store')->name('api.images.store');
             // 编辑登录用户信息
             $api->patch('user', 'UsersController@update')->name('api.user.update');
             // 图片资源
@@ -39,10 +44,8 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers\Api', 'middleware' => 
             $api->post('topics', 'TopicsController@store')->name('api.topics.store');
             //修改话题
             $api->patch('topics/{topic}', 'TopicsController@update')->name('api.topics.update');
-            // 当前登录用户信息
-            $api->get('user', 'UsersController@me')->name('api.user.show');
-            // 图片资源
-            $api->post('images', 'ImagesController@store')->name('api.images.store');
+            //删除话题
+            $api->delete('topics/{topic}', 'TopicsController@destroy')->name('api.topics.destroy');
         });
     });
 });
