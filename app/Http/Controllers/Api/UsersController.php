@@ -7,8 +7,13 @@ use Illuminate\Http\Request;
 use App\Transformers\UserTransformer;
 use App\Http\Requests\Api\UserRequest;
 use App\Models\Image;
+use Illuminate\Support\Facades\DB;
 
 class UsersController extends Controller {
+
+    public function index(){
+        dd($_SERVER);
+    }
 
     /**
      * 用户注册 控制器
