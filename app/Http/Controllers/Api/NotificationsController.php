@@ -28,4 +28,14 @@ class NotificationsController extends Controller
             'unread_count' => $this->user()->notification_count,
         ]);
     }
+
+    /**将消息标为已读
+     * @return \Dingo\Api\Http\Response
+     */
+    public function read()
+    {
+        $this->user()->markAsRead();
+
+        return $this->response->noContent();
+    }
 }
